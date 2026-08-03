@@ -29,24 +29,6 @@
     }
   });
 
-  /* ── highlight the section you are reading ─────────── */
-  var navLinks = Array.prototype.slice.call(nav.querySelectorAll('a[href^="#"]'));
-  var sections = navLinks
-    .map(function (a) { return document.querySelector(a.getAttribute('href')); })
-    .filter(Boolean);
-
-  if ('IntersectionObserver' in window && sections.length) {
-    var spy = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        navLinks.forEach(function (a) {
-          a.classList.toggle('is-current', a.getAttribute('href') === '#' + entry.target.id);
-        });
-      });
-    }, { rootMargin: '-45% 0px -50% 0px' });
-    sections.forEach(function (s) { spy.observe(s); });
-  }
-
   /* ── reveal on scroll ──────────────────────────────── */
   var revealables = document.querySelectorAll('.reveal');
   if ('IntersectionObserver' in window) {
