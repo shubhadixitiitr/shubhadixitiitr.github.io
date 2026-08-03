@@ -26,6 +26,14 @@ publish on GitHub Pages.
 Nine pages, one shared header and footer. Every inner page opens with a dark masthead so
 the navigation stays readable, and closes with a call to action back to Contact.
 
+**Navigation:** Home · About · **Research ▾** · Gallery · Contact. The Research item is a
+dropdown holding *Research overview, Projects, Publications, Experience, Conferences* —
+it opens on hover on desktop, on tap on mobile (where it becomes an indented accordion),
+and the chevron button is keyboard-operable. All five remain ordinary standalone pages
+with their own URLs; only the way you reach them changed. Whenever you are on one of
+them, the Research tab shows the active dot and the matching item is highlighted in the
+menu.
+
 ---
 
 ## 1. Publishing on GitHub Pages
@@ -63,7 +71,7 @@ keeping the same filename** — no HTML editing needed.
 
 | Filename | Where | Suggested size | Notes |
 |---|---|---|---|
-| `logo.png` | Header on every page (and the footer via the same brand block) | 400 × 400, **transparent PNG** | Your SD monogram. It renders in a 52 × 52 box, so keep it square with a little breathing room; a transparent background is important because it sits on dark green. |
+| `logo.png` | Header on every page | 512 × 512, **transparent PNG** | Your SD monogram, with the surrounding transparent padding trimmed off so the mark fills the frame. It renders at 68 px on desktop (56 px once the header shrinks on scroll), 56 px on tablets, 52 px on phones. The untrimmed upload is kept as `logo-original.png`; if you replace `logo.png`, crop it tight to the artwork for the same effect. `favicon.png` is generated from it. |
 | `hero-image.png` | Right side of the home hero | ~1100 × 1300, **transparent PNG** | The complete composite — portrait, fungal imagery, roots, water, all in one. Transparent background so it blends into the dark hero. The bottom edge fades out automatically. |
 
 ### The rest
@@ -71,10 +79,7 @@ keeping the same filename** — no HTML editing needed.
 | Filename | Where | Size | Subject |
 |---|---|---|---|
 | `hero-bg.jpg` | Behind the hero, and faintly behind every inner-page masthead | 1920 × 1080 | Dark microbial texture. Sits under a heavy veil, so a busy image is fine. |
-| `focus-microbiology.png` | Home, card 1 | 500 × 400, PNG | Microbe cluster illustration. |
-| `focus-plant-microbe.png` | Home, card 2 | 500 × 400, PNG | Seedling with roots. |
-| `focus-arsenic.png` | Home, card 3 | 500 × 400, PNG | Bacteria with an "As" marker. |
-| `focus-agriculture.png` | Home, card 4 | 500 × 400, PNG | Sprout in soil. |
+| ~~`focus-*.png`~~ | — | — | **No longer used.** The four ribbon cards below the hero now carry inline SVG line art (microbe cluster, seedling with roots, "As" badge, sprout in soil) drawn in the site palette, so it scales crisply and blends with the card instead of sitting on it as a pasted box. The art lives in the `<svg class="focus-art">` block inside each card in `index.html`. |
 | `about-portrait.jpg` | Home band + About page | 750 × 1000 (3:4) | At the microscope, white coat. |
 | `highlight-fungal-endophytes.jpg` | Home, tile 1 | 900 × 620 | Fungal endophyte micrograph. |
 | `highlight-microbial-remediation.jpg` | Home, tile 2 | 900 × 620 | Bacterial cells / SEM. |

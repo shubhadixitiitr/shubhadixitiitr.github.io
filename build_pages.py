@@ -4,17 +4,23 @@ import os
 
 OUT = "/home/claude/site"
 
-NAV = [
-    ("index.html",        "Home"),
-    ("about.html",        "About"),
-    ("research.html",     "Research"),
+NAV_MAIN = [
+    ("index.html",   "Home"),
+    ("about.html",   "About"),
+    ("__RESEARCH__", "Research"),
+    ("gallery.html", "Gallery"),
+    ("contact.html", "Contact"),
+]
+
+# pages that live under the Research dropdown
+NAV_SUB = [
+    ("research.html",     "Research overview"),
     ("projects.html",     "Projects"),
     ("publications.html", "Publications"),
     ("experience.html",   "Experience"),
     ("conferences.html",  "Conferences"),
-    ("gallery.html",      "Gallery"),
-    ("contact.html",      "Contact"),
 ]
+SUB_FILES = [f for f, _ in NAV_SUB]
 
 ARROW = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m0 0-5-5m5 5-5 5"/></svg>'
 EXT = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>'
@@ -23,12 +29,29 @@ MAIL = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5
 
 
 def head(title, desc, current):
+    def link(href, label):
+        cls = ' class="is-current" aria-current="page"' if href == current else ""
+        return '<a href="%s"%s>%s</a>' % (href, cls, label)
+
+    sub_items = "\n".join(
+        '            <li>%s</li>' % link(f, lbl) for f, lbl in NAV_SUB)
+
+    parent_cls = ' class="is-current"' if current in SUB_FILES else ""
+    parent_aria = ' aria-current="page"' if current == "research.html" else ""
+
+    group = """<li class="has-sub">
+          <a href="research.html"%s%s>Research</a>
+          <button class="sub-toggle" type="button" aria-expanded="false" aria-label="Show research pages">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <ul class="subnav">
+%s
+          </ul>
+        </li>""" % (parent_cls, parent_aria, sub_items)
+
     links = "\n".join(
-        '        <li><a href="%s"%s>%s</a></li>' % (
-            href,
-            ' class="is-current" aria-current="page"' if href == current else "",
-            label)
-        for href, label in NAV)
+        "        " + (group if href == "__RESEARCH__" else "<li>%s</li>" % link(href, label))
+        for href, label in NAV_MAIN)
 
     return """<!DOCTYPE html>
 <html lang="en">
@@ -129,10 +152,10 @@ FOOT = """
       <li><a href="research.html">Research</a></li>
       <li><a href="publications.html">Publications</a></li>
       <li><a href="contact.html">Contact</a></li>
-      <li><a href="https://scholar.google.com/" target="_blank" rel="noopener">Google Scholar</a></li>
-      <li><a href="https://orcid.org/" target="_blank" rel="noopener">ORCID</a></li>
-      <li><a href="https://www.researchgate.net/" target="_blank" rel="noopener">ResearchGate</a></li>
-      <li><a href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="https://scholar.google.com/citations?user=-epYhrEAAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a></li>
+      <li><a href="https://orcid.org/0009-0008-8177-6797" target="_blank" rel="noopener">ORCID</a></li>
+      <li><a href="https://www.researchgate.net/profile/Shubha-Dixit-2" target="_blank" rel="noopener">ResearchGate</a></li>
+      <li><a href="https://www.linkedin.com/in/shubha-dixit-377602171" target="_blank" rel="noopener">LinkedIn</a></li>
       <li><a href="mailto:shubha.dixit.9@gmail.com">Email</a></li>
     </ul>
     <p class="footer-copy">&copy; <span id="year">2026</span> Shubha Dixit. All rights reserved.</p>
@@ -186,16 +209,16 @@ HOME = """
       </div>
 
       <ul class="hero-links">
-        <li><a href="https://scholar.google.com/" target="_blank" rel="noopener">
+        <li><a href="https://scholar.google.com/citations?user=-epYhrEAAAAJ&amp;hl=en" target="_blank" rel="noopener">
           <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 9l10 6 10-6-10-6Zm-6 9v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg>
           Google Scholar</a></li>
-        <li><a href="https://orcid.org/" target="_blank" rel="noopener">
+        <li><a href="https://orcid.org/0009-0008-8177-6797" target="_blank" rel="noopener">
           <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 9v7m0-10v.01M13 9h2a3.5 3.5 0 0 1 0 7h-2z"/></svg>
           ORCID</a></li>
-        <li><a href="https://www.researchgate.net/" target="_blank" rel="noopener">
+        <li><a href="https://www.researchgate.net/profile/Shubha-Dixit-2" target="_blank" rel="noopener">
           <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17V7h3a3 3 0 0 1 0 6H7m4 0 4 4M17 5h.01M17 9h.01"/></svg>
           ResearchGate</a></li>
-        <li><a href="https://www.linkedin.com/" target="_blank" rel="noopener">
+        <li><a href="https://www.linkedin.com/in/shubha-dixit-377602171" target="_blank" rel="noopener">
           <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 10v7m0-10v.01M11 17v-4a2 2 0 0 1 4 0v4"/></svg>
           LinkedIn</a></li>
         <li><a href="mailto:shubha.dixit.9@gmail.com">__MAIL__ Email</a></li>
@@ -219,7 +242,20 @@ HOME = """
       </span>
       <h3>Environmental Microbiology</h3>
       <p>Microbial ecology, diversity analysis and environmental monitoring for sustainable solutions.</p>
-      <img class="focus-art" src="assets/img/focus-microbiology.png" alt="" aria-hidden="true">
+      <svg class="focus-art" viewBox="0 0 120 100" aria-hidden="true" focusable="false">
+        <g fill="none" stroke="#2E7D46" stroke-width="1.6" stroke-linecap="round">
+          <ellipse cx="38" cy="32" rx="16" ry="10" transform="rotate(-18 38 32)" fill="#DCEEDA"/>
+          <path d="M23 38c-6 3-9 8-10 14"/>
+          <ellipse cx="78" cy="24" rx="12" ry="8" transform="rotate(12 78 24)" fill="#EFF7EC"/>
+          <path d="M90 27c5 2 8 6 9 11"/>
+          <circle cx="60" cy="62" r="14" fill="#DCEEDA"/>
+          <circle cx="56" cy="58" r="2.4" fill="#2E7D46" stroke="none"/>
+          <circle cx="65" cy="64" r="2" fill="#2E7D46" stroke="none"/>
+          <circle cx="58" cy="69" r="1.6" fill="#2E7D46" stroke="none"/>
+          <ellipse cx="98" cy="62" rx="10" ry="7" transform="rotate(-25 98 62)" fill="#EFF7EC"/>
+          <path d="M106 55c4-2 6-5 7-9"/>
+        </g>
+      </svg>
     </article>
 
     <article class="focus-card reveal">
@@ -228,7 +264,18 @@ HOME = """
       </span>
       <h3>Plant&ndash;Microbe Interactions</h3>
       <p>Rhizosphere and endophytic microbes enhancing plant growth and stress tolerance.</p>
-      <img class="focus-art" src="assets/img/focus-plant-microbe.png" alt="" aria-hidden="true">
+      <svg class="focus-art" viewBox="0 0 120 100" aria-hidden="true" focusable="false">
+        <g fill="none" stroke="#2E7D46" stroke-width="1.6" stroke-linecap="round">
+          <path d="M28 52h64" stroke-dasharray="3 5" opacity=".45"/>
+          <path d="M60 52V28"/>
+          <path d="M60 40c0-8-6-13-15-13 0 8 6 13 15 13Z" fill="#CFE7C8"/>
+          <path d="M60 34c0-8 6-13 15-13 0 8-6 13-15 13Z" fill="#EFF7EC"/>
+          <path d="M60 52v28M60 60c-8 2-12 8-14 15M60 66c8 2 12 8 14 15M60 74c-5 3-7 7-8 12M60 76c5 3 7 6 8 11"/>
+          <circle cx="40" cy="68" r="4.5" fill="#DCEEDA"/>
+          <circle cx="84" cy="62" r="3.5" fill="#DCEEDA"/>
+          <circle cx="76" cy="82" r="3" fill="#EFF7EC"/>
+        </g>
+      </svg>
     </article>
 
     <article class="focus-card reveal">
@@ -237,7 +284,17 @@ HOME = """
       </span>
       <h3>Arsenic Bioremediation</h3>
       <p>Microbial transformation and immobilization of arsenic for environmental safety.</p>
-      <img class="focus-art" src="assets/img/focus-arsenic.png" alt="" aria-hidden="true">
+      <svg class="focus-art" viewBox="0 0 120 100" aria-hidden="true" focusable="false">
+        <g fill="none" stroke="#2E7D46" stroke-width="1.6" stroke-linecap="round">
+          <circle cx="62" cy="50" r="22" fill="#DCEEDA"/>
+          <text x="62" y="57" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="600" fill="#1F7A42" stroke="none">As</text>
+          <ellipse cx="24" cy="30" rx="11" ry="7" transform="rotate(-20 24 30)" fill="#EFF7EC"/>
+          <path d="M13 36c-5 2-7 6-8 10"/>
+          <ellipse cx="99" cy="78" rx="10" ry="6.5" transform="rotate(-20 99 78)" fill="#EFF7EC"/>
+          <path d="M108 71c5-2 8-6 9-11"/>
+          <path d="M62 22v-8M84 50h8M62 78v8M40 50h-8" opacity=".5"/>
+        </g>
+      </svg>
     </article>
 
     <article class="focus-card reveal">
@@ -246,7 +303,16 @@ HOME = """
       </span>
       <h3>Sustainable Agriculture</h3>
       <p>Microbial strategies for soil health, contaminant mitigation and crop resilience.</p>
-      <img class="focus-art" src="assets/img/focus-agriculture.png" alt="" aria-hidden="true">
+      <svg class="focus-art" viewBox="0 0 120 100" aria-hidden="true" focusable="false">
+        <g fill="none" stroke="#2E7D46" stroke-width="1.6" stroke-linecap="round">
+          <path d="M14 76c14-11 30-16 48-16s34 5 48 16Z" fill="#DCEEDA"/>
+          <path d="M60 60V32"/>
+          <path d="M60 46c-2-10-10-15-19-16 1 10 9 16 19 16Z" fill="#CFE7C8"/>
+          <path d="M60 42c2-10 10-15 19-16-1 10-9 16-19 16Z" fill="#EFF7EC"/>
+          <path d="M22 84h76" opacity=".45"/>
+          <path d="M34 91h52" opacity=".28"/>
+        </g>
+      </svg>
     </article>
 
   </div>
@@ -1004,10 +1070,10 @@ CONTACT = page_head(
 
       <h3 class="col-title col-title-gap">Profiles</h3>
       <ul class="contact-list">
-        <li><a href="https://scholar.google.com/" target="_blank" rel="noopener">Google Scholar</a></li>
-        <li><a href="https://orcid.org/" target="_blank" rel="noopener">ORCID</a></li>
-        <li><a href="https://www.researchgate.net/" target="_blank" rel="noopener">ResearchGate</a></li>
-        <li><a href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://scholar.google.com/citations?user=-epYhrEAAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a></li>
+        <li><a href="https://orcid.org/0009-0008-8177-6797" target="_blank" rel="noopener">ORCID</a></li>
+        <li><a href="https://www.researchgate.net/profile/Shubha-Dixit-2" target="_blank" rel="noopener">ResearchGate</a></li>
+        <li><a href="https://www.linkedin.com/in/shubha-dixit-377602171" target="_blank" rel="noopener">LinkedIn</a></li>
       </ul>
     </div>
 

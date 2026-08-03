@@ -44,6 +44,47 @@
     revealables.forEach(function (el) { el.classList.add('is-visible'); });
   }
 
+  /* ── Research dropdown ─────────────────────────────── */
+  var groups = Array.prototype.slice.call(nav.querySelectorAll('.has-sub'));
+
+  groups.forEach(function (group) {
+    var button = group.querySelector('.sub-toggle');
+    if (!button) return;
+
+    button.addEventListener('click', function (e) {
+      e.preventDefault();
+      var open = !group.classList.contains('is-open');
+      groups.forEach(function (g) {
+        g.classList.remove('is-open');
+        var b = g.querySelector('.sub-toggle');
+        if (b) b.setAttribute('aria-expanded', 'false');
+      });
+      if (open) {
+        group.classList.add('is-open');
+        button.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+
+  // click away, or press Escape, to close
+  document.addEventListener('click', function (e) {
+    groups.forEach(function (g) {
+      if (g.contains(e.target)) return;
+      g.classList.remove('is-open');
+      var b = g.querySelector('.sub-toggle');
+      if (b) b.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    groups.forEach(function (g) {
+      g.classList.remove('is-open');
+      var b = g.querySelector('.sub-toggle');
+      if (b) b.setAttribute('aria-expanded', 'false');
+    });
+  });
+
   /* ── latest-publications carousel ──────────────────── */
   var carousel = document.getElementById('pubCarousel');
   if (carousel) {
